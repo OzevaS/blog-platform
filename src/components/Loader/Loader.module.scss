@@ -1,0 +1,8 @@
+.loader {
+  position: relative !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(50%, 50%) !important;
+
+  height: calc(100vh - 100px) !important;
+}

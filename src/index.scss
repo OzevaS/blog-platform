@@ -1,0 +1,62 @@
+body {
+  background: #e5e5e5;
+  font-family: 'Open Sans', sans-serif;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+.centered-content {
+  max-width: 940px;
+  margin: 0 auto;
+}
+
+@mixin fit-centered-content {
+  width: fit-content;
+  margin: 0 auto;
+}
+
+@mixin nice-button {
+  border-radius: 5px;
+  padding: 6px 18px;
+}
+
+@mixin border-green-button {
+  @include nice-button;
+  border: 1px solid #52c41a;
+  border-radius: 5px;
+  color: #52c41a;
+}
+
+@mixin border-red-button {
+  @include nice-button;
+  border: 1px solid #f5222d;
+  border-radius: 5px;
+  color: #f5222d;
+}
+
+@mixin hidden {
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  clip: rect(0,0,0,0)
+}
+
+@mixin visible {
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
+}

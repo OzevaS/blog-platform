@@ -1,0 +1,72 @@
+@import '../../index.scss';
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  height: 80px;
+  background-color: #fff;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+
+  &__home {
+    justify-self: flex-start;
+
+    border: none;
+    background: none;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 28px;
+    color: rgba(0, 0, 0, 0.85);
+  }
+
+  &__user {
+    justify-self: flex-end;
+
+    display: flex;
+    align-items: center;
+  }
+
+  &__user-item:not(:last-of-type) {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+  }
+}
+
+.button-sign-in {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 28px;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.button-sign-up {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 28px;
+
+  @include border-green-button;
+}
+
+.button-create-article {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+
+  @include border-green-button;
+}
+
+.button-log-out {
+  @include nice-button;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 28px;
+  color: rgba(0, 0, 0, 0.75);
+}

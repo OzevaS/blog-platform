@@ -1,0 +1,176 @@
+@import '../../index.scss';
+
+.article {
+  padding: 15px 19px;
+  margin: 26px;
+
+  background: #ffffff;
+  filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.15));
+  border-radius: 5px;
+
+  & .header {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 4px;
+  }
+
+  & .header-left {
+    margin-right: auto;
+  }
+
+  & .title-likes {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+
+  & .title {
+    margin: 0;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 28px;
+    color: #1890ff;
+  }
+
+  & .like {
+    display: flex;
+    margin-left: 13px;
+  }
+
+  & .like-button {
+    display: flex;
+    position: relative;
+    top: 2px;
+    width: 16px;
+    align-items: center;
+    margin-right: 5px;
+    border: none;
+
+    background-repeat: no-repeat;
+    background-color: transparent;
+  }
+
+  & .likes-count {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 22px;
+    color: rgba(0, 0, 0, 0.75);
+  }
+
+  & .tag-list {
+    margin-bottom: 4px;
+  }
+
+  & .tag-item {
+    border: 1px solid gray;
+    border-radius: 2px;
+    display: inline-block;
+    font-size: 12px;
+    line-height: 14px;
+    margin-right: 5px;
+    padding: 2px 5px;
+  }
+
+  & .author {
+    display: flex;
+    column-gap: 12px;
+  }
+
+  & .authorname-date {
+    display: flex;
+    flex-direction: column;
+  }
+
+  & .authorname {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 28px;
+    color: rgba(0, 0, 0, 0.85);
+  }
+
+  & .date {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 22px;
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  & .author-image {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+  }
+
+  & .description {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 22px;
+    color: rgba(0, 0, 0, 0.75);
+  }
+
+  & .body {
+    @include hidden;
+  }
+
+  & .wrapper {
+    display: flex;
+    align-items: center;
+
+    & .description {
+      margin-right: auto;
+    }
+
+  }
+
+  & .edit-buttons {
+    display: flex;
+    align-items: center;
+
+    * {
+      background: none;
+      border: none;
+    }
+
+    & .edit-button {
+      @include border-green-button;
+      margin-right: 12px;
+    }
+
+    & .delete-button {
+      @include border-red-button;
+    }
+  }
+}
+
+.article--full {
+  min-height: 807px;
+  margin-right: auto;
+  margin-left: auto;
+
+  @media screen and (max-width: 992px) {
+    margin: 26px;
+  }
+
+  & .description {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 22px;
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  & .body {
+    @include visible; 
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 28px;
+    color: rgba(0, 0, 0, 0.75);
+  }
+}

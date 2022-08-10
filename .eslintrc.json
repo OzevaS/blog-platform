@@ -1,0 +1,79 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "react-app",
+    "react-app/jest",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "airbnb",
+    "airbnb-typescript",
+    "plugin:import/typescript",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["react", "@typescript-eslint", "prettier"],
+  "rules": {
+    "no-underscore-dangle":"off",
+    "linebreak-style": [0, "unix"],
+    "semi": "error",
+    "quotes":"off",
+    "no-console": "warn",
+    "no-plusplus": "off",
+    "eol-last": "off",
+    "max-len": ["error", 150, { "ignoreUrls": true }],
+    "arrow-body-style":"off",
+    "spaced-comment":"warn",
+    "class-methods-use-this": "warn",
+    "jsx-a11y/control-has-associated-label": "off",
+    "no-param-reassign": "off",
+    "import/prefer-default-export": "off",
+    "react/react-in-jsx-scope": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "import/no-named-as-default": "off",
+    "react/state-in-constructor": "off",
+    "react/destructuring-assignment": "off",
+    "react/static-property-placement": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/prefer-stateless-function": "off",
+    "react/no-unused-class-component-methods": "off",
+    "react/prop-types": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/default-param-last": "warn",
+    "@typescript-eslint/no-shadow": "off",
+    "react/function-component-definition": "off",
+    "import/order": [
+        2,
+        {
+          "groups": [
+            "builtin",
+            "external",
+            "internal",
+            "parent",
+            "sibling",
+            "index"
+          ],
+          "newlines-between": "always"
+        }
+      ]
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"],
+        "moduleDirectory": ["node_modules", "src/"]
+      }
+    }
+  }
+}
