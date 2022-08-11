@@ -1,12 +1,16 @@
-import { Button } from 'antd';
 import { Link } from 'react-router-dom';
 
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { useAuth } from '../../hooks/useAuth';
+import { userSlice } from '../../store/reducers/UserSlice';
 
 import classNames from './Header.module.scss';
 
 const Header = () => {
   const isAuth = useAuth();
+  const { user } = useAppSelector((state) => state.userReducer);
+  const dispatch = useAppDispatch();
+  const { logout } = userSlice.actions;
 
   let userItems = (
     <ul className={classNames.header__user}>
@@ -26,13 +30,24 @@ const Header = () => {
     userItems = (
       <ul className={classNames.header__user}>
         <li className={classNames['header__user-item']}>
-          <Link to="articles/new" className={classNames['button-create-article']}>Create article</Link>
+          <Link to="articles/new" className={classNames['button-create-article']}>
+            Create article
+          </Link>
         </li>
         <li className={classNames['header__user-item']}>
-          <Link to="/profile" className={classNames['button-profile']}>NickName</Link>
+          <Link to="/profile" className={classNames['header__link-profile']}>
+            <p className={classNames.header__username}>{user?.username}</p>
+            <img
+              src={user?.avatarURL || './static/avatar.svg'}
+              alt={user?.username}
+              className={classNames['header__user-avatar']}
+            />
+          </Link>
         </li>
         <li className={classNames['header__user-item']}>
-          <Link to="/logout" className={classNames['button-log-out']}>Logout</Link>
+          <button onClick={() => dispatch(logout())} type='button' className={classNames['button-log-out']}>
+            Logout
+          </button>
         </li>
       </ul>
     );
