@@ -1,8 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { IArticle, IArticleError } from '../../types/Article';
-import { createArticle , deleteArticle, editArticle } from '../asyncActionCreators/ArticleActions';
-
 
 export interface ArticleState {
   articles: {
@@ -60,33 +58,7 @@ export const articlesSlice = createSlice({
       state.articles.page = action.payload;
     },
   },
-  extraReducers: {
-    [createArticle.fulfilled.type]: (state, action: PayloadAction<IArticle>) => {
-      state.create.article = action.payload;
-      state.create.isLoading = false;
-      state.create.error = null;
-    },
-    [createArticle.rejected.type]: (state, action: PayloadAction<IArticleError>) => {
-      state.create.error = action.payload;
-      state.create.isLoading = false;
-    },
-
-    [editArticle.fulfilled.type]: (state) => {
-      state.create.isLoading = false;
-    },
-    [editArticle.rejected.type]: (state, action: PayloadAction<IArticleError>) => {
-      state.create.error = action.payload;
-      state.create.isLoading = false;
-    },
-
-    [deleteArticle.fulfilled.type]: (state) => {
-      state.create.isLoading = false;
-    },
-    [deleteArticle.rejected.type]: (state, action: PayloadAction<IArticleError>) => {
-      state.create.error = action.payload;
-      state.create.isLoading = false;
-    },
-  },
+  extraReducers: {},
 });
 
 export default articlesSlice.reducer;

@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 
-import { IArticle, IArticleResponse, IArticleArrayResponse } from '../types/Article';
+import { IArticle, IArticleArrayResponse, IArticleResponse } from '../types/Article';
 
-export const articlesApi = createApi({
+const articlesApi = createApi({
   reducerPath: 'articlesAPI',
   baseQuery: fetchBaseQuery({
     baseUrl: 'https://blog.kata.academy/api',
@@ -34,7 +34,7 @@ export const articlesApi = createApi({
         method: 'POST',
         body: {
           article: params,
-        }
+        },
       }),
     }),
     editArticle: build.mutation<IArticleResponse, IArticle>({
@@ -48,14 +48,38 @@ export const articlesApi = createApi({
             body: params.body,
             tagList: params.tagList,
           },
-        }
+        },
       }),
     }),
-    deleteArticle: build.mutation<IArticleResponse, unknown>({
+    deleteArticle: build.mutation<IArticleResponse, string>({
       query: (slug) => ({
         url: `/articles/${slug}`,
         method: 'DELETE',
       }),
     }),
+    favoriteArticle: build.mutation<IArticleResponse, string>({
+      query: (slug) => ({
+        url: `/articles/${slug}/favorite`,
+        method: 'POST',
+      }),
+    }),
+    unfavoriteArticle: build.mutation<IArticleResponse, string>({
+      query: (slug) => ({
+        url: `/articles/${slug}/favorite`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
+
+export default articlesApi;
+
+export const {
+  useFetchAllArticlesQuery,
+  useFetchArticleQuery,
+  useCreateArticleMutation,
+  useEditArticleMutation,
+  useDeleteArticleMutation,
+  useFavoriteArticleMutation,
+  useUnfavoriteArticleMutation,
+} = articlesApi;

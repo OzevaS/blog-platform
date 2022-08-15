@@ -2,7 +2,8 @@
 
 .article {
   padding: 15px 19px;
-  margin: 26px;
+  position: relative;
+  transform: rotate(0deg);
 
   background: #ffffff;
   filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.15));
@@ -125,7 +126,6 @@
     & .description {
       margin-right: auto;
     }
-
   }
 
   & .edit-buttons {
@@ -153,10 +153,6 @@
   margin-right: auto;
   margin-left: auto;
 
-  @media screen and (max-width: 992px) {
-    margin: 26px;
-  }
-
   & .description {
     font-style: normal;
     font-weight: 400;
@@ -166,7 +162,7 @@
   }
 
   & .body {
-    @include visible; 
+    @include visible;
     font-style: normal;
     font-weight: 400;
     font-size: 18px;

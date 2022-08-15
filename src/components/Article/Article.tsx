@@ -1,8 +1,9 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable react/no-children-prop */
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { format } from 'date-fns';
 import React, { FC } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 
 import { IArticle } from '../../types/Article';
@@ -11,6 +12,7 @@ import classNames from './Article.module.scss';
 
 interface ArticleProps {
   article: IArticle;
+  onClickFavorite?: (slug: string) => void;
   isFull?: boolean;
   isEdit?: boolean;
   onEdit?: () => void;
@@ -18,15 +20,7 @@ interface ArticleProps {
 }
 
 const Article: FC<ArticleProps> = React.memo(
-  ({ article, isFull = false, isEdit = false, onEdit = () => {}, onDelete = () => {} }) => {
-    const navigate = useNavigate();
-
-    const tagList = article.tagList.map((tag: string) => (
-      <span key={tag} className={classNames['tag-item']}>
-        {tag}
-      </span>
-    ));
-
+  ({ article, onClickFavorite = () => {}, isFull = false, isEdit = false, onEdit = () => {}, onDelete = () => {} }) => {
     const styleLike = article.favorited
       ? { backgroundImage: 'url(/static/like-active.svg)' }
       : { backgroundImage: 'url(/static/like.svg)' };
@@ -54,7 +48,11 @@ const Article: FC<ArticleProps> = React.memo(
       </div>
     ) : null;
 
-    const onClickLike = () => {};
+    const tagList = article.tagList.map((tag: string, index: number) => (
+      <span key={tag + index} className={classNames['tag-item']}>
+        {tag}
+      </span>
+    ));
 
     return (
       <div className={classNameArticle}>
@@ -63,7 +61,12 @@ const Article: FC<ArticleProps> = React.memo(
             <div className={classNames['title-likes']}>
               {title}
               <div className={classNames.like}>
-                <button onClick={onClickLike} className={classNames['like-button']} type="button" style={styleLike} />
+                <button
+                  onClick={() => onClickFavorite(article.slug)}
+                  className={classNames['like-button']}
+                  type="button"
+                  style={styleLike}
+                />
                 <span className={classNames['likes-count']}>{article.favoritesCount}</span>
               </div>
             </div>
@@ -81,10 +84,18 @@ const Article: FC<ArticleProps> = React.memo(
           <p className={classNames.description}>{article.description}</p>
           {editButtons}
         </div>
-        <ReactMarkdown className={classNames.body} children={article.body} />
+        <ArticleBody text={article.body} />
       </div>
     );
   }
 );
+
+interface ArticleBodyProps {
+  text: string;
+}
+
+const ArticleBody: FC<ArticleBodyProps> = React.memo(({ text }) => {
+  return <ReactMarkdown className={classNames.body} children={text} />;
+});
 
 export default Article;

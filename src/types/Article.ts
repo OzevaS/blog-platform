@@ -19,10 +19,7 @@ export interface IArticleArrayResponse {
 }
 
 export interface IArticleResponse {
-  article?: IArticle;
-  errors?: {
-    body: string[];
-  };
+  article: IArticle;
 }
 
 export interface IArticleError {

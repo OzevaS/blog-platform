@@ -1,6 +1,6 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 
-import { articlesApi } from '../services/ArticlesService';
+import articlesApi from '../services/ArticlesService';
 
 import userReducer from './reducers/UserSlice';
 import articlesReducer from './reducers/ArticlesSlice';

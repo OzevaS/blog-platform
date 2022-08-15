@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { message } from 'antd';
 
 import classNames from '../../forms/formSection.module.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
@@ -39,10 +40,14 @@ const RegisterPage = () => {
     };
   }, []);
 
-  console.log('errors', formErrors);
+  useEffect(() => {
+    if (registerError) {
+      message.error('Не удалось зарегистрироваться');
+    }
+  }, [registerError]);
 
   return (
-    <section className={classNames.formSection}>
+    <section className={`${classNames.formSection} small-centered-content`} style={{ maxWidth: '384px' }}>
       <form className={classNames.form} onSubmit={handleSubmit(onSubmit)}>
         <h1 className={classNames.title}>Create new account</h1>
         <label htmlFor="Username" className={classNameFormGroup(errors.username)}>

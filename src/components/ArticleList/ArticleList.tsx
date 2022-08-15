@@ -7,13 +7,14 @@ import classNames from './ArticleList.module.scss';
 
 interface ArticleListProps {
   articles: IArticle[];
+  onClickFavorite?: (slug: string) => void;
 }
 
-const ArticleList: FC<ArticleListProps> = ({ articles }) => {
+const ArticleList: FC<ArticleListProps> = ({ articles, onClickFavorite = () => {} }) => {
   return (
     <div className={classNames['article-list']}>
       {articles.map((article) => (
-        <Article key={article.slug} article={article} />
+        <Article key={article.slug} article={article} onClickFavorite={onClickFavorite}/>
       ))}
     </div>
   );

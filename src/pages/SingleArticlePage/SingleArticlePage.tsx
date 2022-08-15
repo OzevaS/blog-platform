@@ -1,65 +1,129 @@
 /* eslint-disable react/jsx-no-undef */
-import { CSSProperties, useState } from 'react';
-import { Spin, Alert } from 'antd';
+import { CSSProperties, useEffect, useState } from 'react';
+import { Spin, Alert, message } from 'antd';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import Article from '../../components/Article';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { articlesApi } from '../../services/ArticlesService';
+import { useAppSelector } from '../../hooks/redux';
+import {
+  useDeleteArticleMutation,
+  useFavoriteArticleMutation,
+  useFetchArticleQuery,
+  useUnfavoriteArticleMutation,
+} from '../../services/ArticlesService';
 import Notification from '../../components/Notification';
-import { deleteArticle } from '../../store/asyncActionCreators/ArticleActions';
+import { IArticle } from '../../types/Article';
 
 const SingleArticlePage = () => {
   const { slug } = useParams();
+  const navigate = useNavigate();
+  const [articleData, setArticleData] = useState<IArticle | null>(null);
   const [notification, setNotification] = useState<{ visible: boolean; style: CSSProperties }>({
     visible: false,
-    style: {},
+    style: {
+      position: 'absolute',
+      top: '120px',
+      right: '19px',
+    },
   });
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
 
-  const { data, isLoading, isError } = articlesApi.useFetchArticleQuery(slug || '', { refetchOnMountOrArgChange: true });
+  const {
+    data: fetchArticleData,
+    isLoading: fetchArticleDataIsLoading,
+    isError: fetchArticleIsError,
+  } = useFetchArticleQuery(slug || '', { refetchOnMountOrArgChange: true });
+  const [deleteArticle, { isError: deleteArticleIsError, isSuccess: deleteArticleIsSuccess }] =
+    useDeleteArticleMutation();
+  const [favoriteArticle, { isError: favoriteIsError }] = useFavoriteArticleMutation();
+  const [unFavoriteArticle, { isError: unFavoriteIsError }] = useUnfavoriteArticleMutation();
+
   const { user } = useAppSelector((state) => state.userReducer);
 
-  const isEdit = data?.article?.author.username === user?.username;
+  useEffect(() => {
+    if (deleteArticleIsSuccess) {
+      navigate('/');
+    }
+  }, [deleteArticleIsSuccess]);
+
+  useEffect(() => {
+    if (fetchArticleData) {
+      setArticleData(fetchArticleData.article);
+    }
+  }, [fetchArticleData]);
+
+  useEffect(() => {
+    if (favoriteIsError) {
+      message.error('Не удалось добавить статью в избранное');
+    }
+  }, [favoriteIsError]);
+
+  useEffect(() => {
+    if (unFavoriteIsError) {
+      message.error('Не удалось удалить статью из избранного');
+    }
+  }, [unFavoriteIsError]);
+
+  useEffect(() => {
+    if (deleteArticleIsError) {
+      message.error('Не удалось удалить статью');
+    }
+  }, [deleteArticleIsError]);
+
+  const isEdit = fetchArticleData?.article?.author.username === user?.username;
 
   const onEdit = () => {
     navigate(`/articles/${slug}/edit`);
   };
 
-  const onDelete = (e: any) => {
-    const button = e.target;
-    const { x, y, height, width } = button.getBoundingClientRect();
-    const offsetY = 10;
-    setNotification({
-      visible: true,
-      style: {
-        position: 'absolute',
-        top: `${y + height + offsetY}px`,
-        right: `${45}px`,
-      },
+  const onClickFavorite = (slug: string) => {
+    const article = articleData;
+    const favoriteAction = article?.favorited ? unFavoriteArticle : favoriteArticle;
+    favoriteAction(slug).then((response) => {
+      if ('data' in response && article) {
+        const newArticle = {
+          ...article,
+          favorited: !article.favorited,
+          favoritesCount: article.favoritesCount + (article.favorited ? -1 : 1),
+        };
+        setArticleData(newArticle as IArticle);
+      }
     });
+  };
+
+  const onDelete = (e: any) => {
+    setNotification((prevState) => ({
+      ...prevState,
+      visible: true,
+    }));
   };
 
   const onConfirm = () => {
     if (slug) {
-      dispatch(deleteArticle(slug));
-      //navigate('/');
+      deleteArticle(slug);
     }
   };
 
   const onCancel = () => {
-    setNotification({
+    setNotification((prevState) => ({
+      ...prevState,
       visible: false,
-      style: {},
-    });
+    }));
   };
 
   return (
-    <div className="centered-content">
-      {isLoading && <Spin size="large" />}
-      {isError && <Alert message="Error" type="error" description="Не удалось загрузить статью" />}
-      {data?.article && <Article article={data.article} isFull isEdit={isEdit} onDelete={onDelete} onEdit={onEdit} />}
+    <div className="big-centered-content">
+      {fetchArticleDataIsLoading && <Spin size="large" />}
+      {fetchArticleIsError && <Alert message="Error" type="error" description="Не удалось загрузить статью" />}
+      {articleData && !fetchArticleIsError && (
+        <Article
+          article={articleData}
+          isFull
+          isEdit={isEdit}
+          onDelete={onDelete}
+          onEdit={onEdit}
+          onClickFavorite={onClickFavorite}
+        />
+      )}
       {notification.visible && (
         <Notification
           message="Are you sure to delete this article?"

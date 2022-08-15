@@ -18,8 +18,7 @@ export const loginUser = createAsyncThunk('user/login', async (params: IUserLogi
     }
     return response.data.user;
   } catch (error: any) {
-    console.log(error);
-    return thunkAPI.rejectWithValue(error.response.data.errors);
+    return thunkAPI.rejectWithValue('Не удалось войти в систему');
   }
 });
 
@@ -38,7 +37,7 @@ export const registerUser = createAsyncThunk('user/register', async (params: IUs
     }
     return response.data.user;
   } catch (error: any) {
-    return thunkAPI.rejectWithValue(error.response.data.errors);
+    return thunkAPI.rejectWithValue('Не удалось зарегистрироваться в системе');
   }
 });
 
@@ -53,6 +52,7 @@ export const updateUser = createAsyncThunk('user/edit', async (params: IUserEdit
     localStorage.setItem('user', JSON.stringify(response.data.user));
     return response.data.user;
   } catch (error: any) {
-    return thunkAPI.rejectWithValue(error.response.data.errors);
+    console.log('updateerror', error);
+    return thunkAPI.rejectWithValue('Не удалось обновить данные пользователя');
   }
 });

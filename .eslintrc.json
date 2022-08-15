@@ -54,6 +54,7 @@
     "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/default-param-last": "warn",
     "@typescript-eslint/no-shadow": "off",
+    "@typescript-eslint/no-use-before-define": "warn",
     "react/function-component-definition": "off",
     "import/order": [
         2,

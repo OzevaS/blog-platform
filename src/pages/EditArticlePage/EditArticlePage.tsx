@@ -1,28 +1,32 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { message } from 'antd';
 
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import ArticleForm, { ArticleFormData } from '../../components/ArticleForm';
-import { articlesApi } from '../../services/ArticlesService';
+import { useEditArticleMutation, useFetchArticleQuery } from '../../services/ArticlesService';
 import { IArticle } from '../../types/Article';
 import Notification from '../../components/Notification';
 
 const EditArticlePage = () => {
   const { slug } = useParams();
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const {
     data: articleData,
-    isLoading: articleIsLoading,
     isError: articleIsError,
-  } = articlesApi.useFetchArticleQuery(slug || '', { refetchOnMountOrArgChange: true });
-  const [editArticle, { data: editArticleData, error: editArticleError }] = articlesApi.useEditArticleMutation();
+  } = useFetchArticleQuery(slug || '', { refetchOnMountOrArgChange: true });
+  const [editArticle, { data: editArticleData, error: editArticleError }] = useEditArticleMutation();
 
   useEffect(() => {
     if (editArticleData?.article) {
       navigate(`/articles/${slug}`);
     }
   }, [editArticleData]);
+
+  useEffect(() => {
+    if (editArticleError) {
+      message.error('Не удалось отредактировать статью');
+    }
+  }, [editArticleError]);
 
   const onSubmit = (data: ArticleFormData) => {
     const { title, description, body, tags } = data;
@@ -38,9 +42,8 @@ const EditArticlePage = () => {
   };
 
   return (
-    <section style={{ position: 'relative' }}>
+    <section className="big-centered-content">
       <ArticleForm title="Edit article" onSubmit={onSubmit} data={formData} />
-      {editArticleError && <Notification title="Ошибка" error message="Не удалось изменить статью" />}
     </section>
   );
 };

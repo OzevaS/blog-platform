@@ -1,8 +1,9 @@
 /* eslint-disable no-continue */
 /* eslint-disable no-restricted-syntax */
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { message } from 'antd';
 
 import classNames from '../../forms/formSection.module.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
@@ -31,7 +32,6 @@ const ProfilePage = () => {
   const errors = { ...formErrors, ...editError };
 
   const onSubmit = handleSubmit((data: any) => {
-    console.log(data);
     const dataFormatted: any = {};
     for (const key in data)
       if (data[key] !== '') {
@@ -40,16 +40,20 @@ const ProfilePage = () => {
     dispatch(updateUser({ ...dataFormatted, token: user?.token }));
   });
 
-  console.log('editError', editError);
-
   useEffect(() => {
     return () => {
       dispatch(clearErrorEditProfile());
     };
   }, []);
 
+  useEffect(() => {
+    if (editError) {
+      message.error('Не удалось обновить профиль');
+    }
+  }, [editError]);
+
   return (
-    <section className={classNames.formSection}>
+    <section className={`${classNames.formSection} small-centered-content`} style={{maxWidth: '384px'}}>
       <h1 className={classNames.title}>Edit Profile</h1>
       <form onSubmit={onSubmit}>
         <label htmlFor="Username" className={classNameFormGroup(errors.username)}>

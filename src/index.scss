@@ -18,9 +18,19 @@ a {
   text-decoration: none;
 }
 
-.centered-content {
+.big-centered-content {
   max-width: 940px;
-  margin: 0 auto;
+  margin: 26px auto;
+  position: relative;
+  transform: rotate(0deg);
+
+  @media screen and (max-width: 992px) {
+    margin: 26px;
+  }
+}
+
+.small-centered-content {
+  max-width: 384px;
 }
 
 @mixin fit-centered-content {

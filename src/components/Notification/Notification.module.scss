@@ -1,10 +1,9 @@
 @import '../../index.scss';
 
-.notification,
-.notification--error {
+.notification {
   position: relative;
   padding: 16px 17px;
-  max-width: 240px;
+  width: 240px;
   background: #ffffff;
   border-radius: 4px;
   filter: drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.15));
@@ -14,10 +13,6 @@
   font-size: 14px;
   line-height: 22px;
   color: #595959;
-
-  &.hidden {
-    @include hidden;
-  }
 
   & .icon {
     display: inline-block;
@@ -55,49 +50,4 @@
       color: #ffffff;
     }
   }
-
-  & .close {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    top: -5px;
-    right: -5px;
-    background-color: #ffffff;
-    border: 1px solid #d9d9d9;
-    cursor: pointer;
-
-    &:hover {
-      background-color: #f5f5f5;
-    }
-
-    &::after, &::before {
-      content: '';
-      position: absolute;
-      top: 8px;
-      width: 13px;
-      height: 2px;
-      background-color: #1890ff;
-    }
-
-    &::after {
-      left: 2.5px;
-      transform: rotate(45deg);
-    }
-
-    &::before {
-      right: 2.5px;
-      transform: rotate(-45deg);
-    }
-  }
-}
-
-.notification--error {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  border: 1px solid #f5222d;
-  color: #f5222d;
 }

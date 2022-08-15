@@ -56,6 +56,9 @@ export const userSlice = createSlice({
       state.user = action.payload;
       state.isAuth = true;
     },
+    [loginUser.pending.type]: (state) => {
+      state.error.login = null;
+    },
     [loginUser.rejected.type]: (state, action: PayloadAction<UserLoginError>) => {
       state.isAuth = false;
       state.error.login = action.payload;
@@ -65,6 +68,9 @@ export const userSlice = createSlice({
       state.user = action.payload;
       state.isAuth = true;
     },
+    [registerUser.pending.type]: (state) => {
+      state.error.register = null;
+    },
     [registerUser.rejected.type]: (state, action: PayloadAction<UserRegisterError>) => {
       state.isAuth = false;
       state.error.register = action.payload;
@@ -72,6 +78,9 @@ export const userSlice = createSlice({
 
     [updateUser.fulfilled.type]: (state, action: PayloadAction<IUser>) => {
       state.user = action.payload;
+    },
+    [updateUser.pending.type]: (state) => {
+      state.error.edit = null;
     },
     [updateUser.rejected.type]: (state, action: PayloadAction<UserEditError>) => {
       state.error.edit = action.payload;
