@@ -50,6 +50,12 @@
       color: rgba(0, 0, 0, 0.85);
     }
   }
+
+  &__user-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+  }
 }
 
 .button-sign-in {

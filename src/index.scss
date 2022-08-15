@@ -31,6 +31,7 @@ a {
 @mixin nice-button {
   border-radius: 5px;
   padding: 6px 18px;
+  background: transparent;
 }
 
 @mixin border-green-button {
@@ -47,11 +48,18 @@ a {
   color: #f5222d;
 }
 
+@mixin border-blue-button {
+  @include nice-button;
+  border: 1px solid #1890ff;
+  border-radius: 5px;
+  color: #1890ff;
+}
+
 @mixin hidden {
   width: 0;
   height: 0;
   overflow: hidden;
-  clip: rect(0,0,0,0)
+  clip: rect(0, 0, 0, 0);
 }
 
 @mixin visible {

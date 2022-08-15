@@ -1,63 +1,78 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import classNames from '../../forms/formSection.module.scss';
-import { formConfirm, formEmail, formPassword, formUsername, formPasswordConfirm } from '../../forms/useFormTemplates';
-import { useAppDispatch } from '../../hooks/redux';
-import { IUserRegisterRequest } from '../../types/User';
-import { handleFormErrors } from '../../forms/checkForm';
-import { loginUser, registerUser } from '../../store/asyncActionCreators/UserActions';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { registerUser } from '../../store/asyncActionCreators/UserActions';
+import { userSlice } from '../../store/reducers/UserSlice';
+import { registerSchema } from '../../forms/formSchemas';
+
+interface RegisterFormData {
+  username: string;
+  email: string;
+  password: string;
+  passwordConfirm: string;
+  confirm: boolean;
+}
+
+const classNameFormGroup = (error: any) => `${error ? classNames['formGroup--error'] : classNames.formGroup}`;
 
 const RegisterPage = () => {
-  const {
-    handleSubmit,
-    register,
-    watch,
-    formState: { errors },
-  } = useForm();
-  const [formData, setFormData] = useState<IUserRegisterRequest | null>(null);
+  const { handleSubmit, register, formState } = useForm<RegisterFormData>({
+    resolver: yupResolver(registerSchema),
+  });
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const { clearErrorRegister } = userSlice.actions;
+  const { register: registerError } = useAppSelector((state) => state.userReducer.error);
+  const { errors: formErrors } = formState;
+  const errors = { ...formErrors, ...registerError };
 
   const onSubmit = async (data: any) => {
-    console.log(data);
     dispatch(registerUser(data));
-    navigate('/');
   };
 
-  const refForm = useRef<HTMLFormElement>(null);
-  handleFormErrors(errors, refForm.current as HTMLFormElement);
+  useEffect(() => {
+    return () => {
+      dispatch(clearErrorRegister());
+    };
+  }, []);
+
+  console.log('errors', formErrors);
 
   return (
     <section className={classNames.formSection}>
-      <form ref={refForm} className={classNames.form} onSubmit={handleSubmit(onSubmit)}>
+      <form className={classNames.form} onSubmit={handleSubmit(onSubmit)}>
         <h1 className={classNames.title}>Create new account</h1>
-        <label htmlFor="Username" className={classNames.formGroup}>
+        <label htmlFor="Username" className={classNameFormGroup(errors.username)}>
           Username
-          <input {...formUsername('username', register)} id="name" placeholder="Username" />
+          <input {...register('username')} id="name" placeholder="Username" />
+          {formErrors?.username && <p>{formErrors.username.message}</p>}
+          {registerError?.username && <p>{registerError.username}</p>}
         </label>
-        <label htmlFor="Email" className={classNames.formGroup}>
+        <label htmlFor="Email" className={classNameFormGroup(errors.email)}>
           Email
-          <input {...formEmail('email', register)} placeholder="Email" />
+          <input {...register('email')} placeholder="Email" />
+          {formErrors?.email && <p>{formErrors.email.message}</p>}
+          {registerError?.email && <p>{registerError.email}</p>}
         </label>
-        <label htmlFor="Password" className={classNames.formGroup}>
+        <label htmlFor="Password" className={classNameFormGroup(errors.password)}>
           Password
-          <input {...formPassword('password', register)} id="password" placeholder="Password" />
+          <input {...register('password')} id="password" placeholder="Password" />
+          {formErrors?.password && <p>{formErrors.password.message}</p>}
         </label>
-        <label htmlFor="ConfirmPassword" className={classNames.formGroup}>
+        <label htmlFor="ConfirmPassword" className={classNameFormGroup(errors.passwordConfirm)}>
           Confirm password
-          <input
-            {...formPasswordConfirm('passwordConfirm', watch('password') as unknown as string, register)}
-            id="confirmPassword"
-            placeholder="Confirm password"
-          />
+          <input {...register('passwordConfirm')} id="confirmPassword" placeholder="Confirm password" />
+          {formErrors?.passwordConfirm && <p>{formErrors.passwordConfirm.message}</p>}
         </label>
-        <div className={classNames.formGroup}>
+        <div className={classNameFormGroup(errors.confirm)}>
           <label htmlFor="confirm" className={classNames.confirm}>
-            <input {...formConfirm('confirm', register)} type="checkbox" id="confirm" />I agree to the processing of my
-            personal information
-            <span className={classNames.checkmark} />
+            <input {...register('confirm')} type="checkbox" id="confirm" />I agree to the processing of my personal
+            information
+            <p className={classNames.checkmark} />
+            {formErrors?.confirm && <p>{formErrors.confirm.message}</p>}
           </label>
         </div>
         <button type="submit" className={classNames.submit}>

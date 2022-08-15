@@ -12,6 +12,11 @@ const Header = () => {
   const dispatch = useAppDispatch();
   const { logout } = userSlice.actions;
 
+  const onLogout = () => {
+    localStorage.setItem('user', '');
+    dispatch(logout());
+  };
+
   let userItems = (
     <ul className={classNames.header__user}>
       <li className={classNames['header__user-item']}>
@@ -26,6 +31,7 @@ const Header = () => {
       </li>
     </ul>
   );
+
   if (isAuth)
     userItems = (
       <ul className={classNames.header__user}>
@@ -38,14 +44,14 @@ const Header = () => {
           <Link to="/profile" className={classNames['header__link-profile']}>
             <p className={classNames.header__username}>{user?.username}</p>
             <img
-              src={user?.avatarURL || './static/avatar.svg'}
+              src={user?.image || './static/avatar.svg'}
               alt={user?.username}
               className={classNames['header__user-avatar']}
             />
           </Link>
         </li>
         <li className={classNames['header__user-item']}>
-          <button onClick={() => dispatch(logout())} type='button' className={classNames['button-log-out']}>
+          <button onClick={onLogout} type="button" className={classNames['button-log-out']}>
             Logout
           </button>
         </li>

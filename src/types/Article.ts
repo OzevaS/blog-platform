@@ -1,5 +1,3 @@
-import { IUser } from './User';
-
 export interface IArticle {
   slug: string;
   title: string;
@@ -21,5 +19,12 @@ export interface IArticleArrayResponse {
 }
 
 export interface IArticleResponse {
-  article: IArticle;
+  article?: IArticle;
+  errors?: {
+    body: string[];
+  };
+}
+
+export interface IArticleError {
+  body: string[];
 }

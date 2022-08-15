@@ -169,8 +169,13 @@
     @include visible; 
     font-style: normal;
     font-weight: 400;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 28px;
     color: rgba(0, 0, 0, 0.75);
+
+    img {
+      width: 100%;
+      height: auto;
+    }
   }
 }

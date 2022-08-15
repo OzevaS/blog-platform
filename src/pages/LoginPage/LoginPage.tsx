@@ -1,42 +1,57 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import classNames from '../../forms/formSection.module.scss';
-import { formEmail, formPassword } from '../../forms/useFormTemplates';
-import { handleFormErrors } from '../../forms/checkForm';
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { loginUser } from '../../store/asyncActionCreators/UserActions';
+import { useAuth } from '../../hooks/useAuth';
+import { useFromPage } from '../../hooks/useFromPage';
+import { userSlice } from '../../store/reducers/UserSlice';
+import { loginSchema } from '../../forms/formSchemas';
+
+interface LoginFormData {
+  email: string;
+  password: string;
+}
+
+const classNameFormGroup = (error: any) => `${error ? classNames['formGroup--error'] : classNames.formGroup}`;
 
 const LoginPage = () => {
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm();
+  const { handleSubmit, register, formState } = useForm<LoginFormData>({
+    resolver: yupResolver(loginSchema),
+  });
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const { clearErrorLogin } = userSlice.actions;
+  const { login: loginError } = useAppSelector((state) => state.userReducer.error);
+  const { errors: formErrors } = formState;
+  const errors = { ...formErrors };
 
   const onSubmit = (data: any) => {
-    console.log(data);
     dispatch(loginUser(data));
-    navigate('/');
   };
 
-  const refForm = useRef<HTMLFormElement>(null);
-  handleFormErrors(errors, refForm.current as HTMLFormElement);
+  useEffect(() => {
+    return () => {
+      dispatch(clearErrorLogin());
+    };
+  }, []);
 
   return (
     <section className={classNames.formSection}>
       <h1 className={classNames.title}>Sign In</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="Email" className={classNames.formGroup}>
+        <label htmlFor="Email" className={classNameFormGroup(errors.email)}>
           Email
-          <input {...formEmail('email', register)} type="email" id="email" placeholder="Email" />
+          <input {...register('email')} id="email" placeholder="Email" />
+          {formErrors?.email && <p>{formErrors.email.message}</p>}
         </label>
-        <label htmlFor="Password" className={classNames.formGroup}>
+        <label htmlFor="Password" className={classNameFormGroup(errors.password)}>
           Password
-          <input {...formPassword('password', register)} type="password" id="password" placeholder="Password" />
+          <input {...register('password')} type="password" id="password" placeholder="Password" />
+          {formErrors?.password && <p>{formErrors.password.message}</p>}
+          {loginError && <span className={classNames.errorMessage}>Email or password is invalid</span>}
         </label>
         <button type="submit" className={classNames.submit}>
           Sign In

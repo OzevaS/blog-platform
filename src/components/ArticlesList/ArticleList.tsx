@@ -10,7 +10,6 @@ interface ArticleListProps {
 }
 
 const ArticleList: FC<ArticleListProps> = ({ articles }) => {
-  console.log(articles);
   return (
     <div className={classNames['article-list']}>
       {articles.map((article) => (
