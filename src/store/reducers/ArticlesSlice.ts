@@ -58,7 +58,6 @@ export const articlesSlice = createSlice({
       state.articles.page = action.payload;
     },
   },
-  extraReducers: {},
 });
 
 export default articlesSlice.reducer;

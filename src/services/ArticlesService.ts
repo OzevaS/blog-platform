@@ -1,31 +1,22 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
+import { createApi } from '@reduxjs/toolkit/dist/query/react';
 
 import { IArticle, IArticleArrayResponse, IArticleResponse } from '../types/Article';
 
+import { baseQuery } from './settings';
+
 const articlesApi = createApi({
   reducerPath: 'articlesAPI',
-  baseQuery: fetchBaseQuery({
-    baseUrl: 'https://blog.kata.academy/api',
-    prepareHeaders: (headers) => {
-      const token = localStorage.getItem('token');
-
-      if (token) {
-        headers.set('authorization', `Bearer ${token}`);
-      }
-
-      return headers;
-    },
-  }),
+  baseQuery,
   endpoints: (build) => ({
-    fetchAllArticles: build.query<IArticleArrayResponse, { page: number; limit: number }>({
+    fetchAllArticles: build.query<IArticleArrayResponse, { page: number; limit: number; isAuth: boolean }>({
       query: (params) => ({
         url: '/articles',
         params: { limit: params.limit, offset: (params.page - 1) * params.limit },
       }),
     }),
-    fetchArticle: build.query<IArticleResponse, string>({
-      query: (slug) => ({
-        url: `/articles/${slug}`,
+    fetchArticle: build.query<IArticleResponse, { slug: string; isAuth: boolean }>({
+      query: (params) => ({
+        url: `/articles/${params.slug}`,
       }),
     }),
     createArticle: build.mutation<IArticleResponse, IArticle>({

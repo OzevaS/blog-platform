@@ -5,7 +5,6 @@ import { message } from 'antd';
 import ArticleForm, { ArticleFormData } from '../../components/ArticleForm';
 import { useCreateArticleMutation } from '../../services/ArticlesService';
 import { IArticle } from '../../types/Article';
-import Notification from '../../components/Notification';
 
 const CreateArticlePage = () => {
   const navigate = useNavigate();

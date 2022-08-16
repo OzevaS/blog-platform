@@ -25,7 +25,7 @@ const LoginPage = () => {
   const { clearErrorLogin } = userSlice.actions;
   const { login: loginError } = useAppSelector((state) => state.userReducer.error);
   const { errors: formErrors } = formState;
-  const errors = { ...formErrors };
+  const errors = { ...formErrors, loginError };
 
   const onSubmit = (data: any) => {
     dispatch(loginUser(data));
@@ -39,12 +39,12 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (loginError) {
-      message.error('Не удалось войти в систему');
+      message.error('Не удалось войти в систему: Email or password is invalid');
     }
   }, [loginError]);
 
   return (
-    <section className={`${classNames.formSection} small-centered-content`} style={{maxWidth: '384px'}}>
+    <section className={`${classNames.formSection} small-centered-content`} style={{ maxWidth: '384px' }}>
       <h1 className={classNames.title}>Sign In</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor="Email" className={classNameFormGroup(errors.email)}>
@@ -56,7 +56,6 @@ const LoginPage = () => {
           Password
           <input {...register('password')} type="password" id="password" placeholder="Password" />
           {formErrors?.password && <p>{formErrors.password.message}</p>}
-          {loginError && <span className={classNames.errorMessage}>Email or password is invalid</span>}
         </label>
         <button type="submit" className={classNames.submit}>
           Sign In

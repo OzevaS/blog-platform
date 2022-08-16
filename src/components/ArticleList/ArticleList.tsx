@@ -14,7 +14,7 @@ const ArticleList: FC<ArticleListProps> = ({ articles, onClickFavorite = () => {
   return (
     <div className={classNames['article-list']}>
       {articles.map((article) => (
-        <Article key={article.slug} article={article} onClickFavorite={onClickFavorite}/>
+        <Article key={article.slug} article={article} onClickFavorite={onClickFavorite} />
       ))}
     </div>
   );

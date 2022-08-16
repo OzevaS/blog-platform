@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import ArticleList from '../../components/ArticleList';
 import Loader from '../../components/Loader';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { useAuth } from '../../hooks/useAuth';
 import {
   useFavoriteArticleMutation,
   useFetchAllArticlesQuery,
@@ -15,6 +16,7 @@ import { IArticle } from '../../types/Article';
 const ArticlesPage = () => {
   const { page, limit } = useAppSelector((state) => state.articlesReducer.articles);
   const dispatch = useAppDispatch();
+  const isAuth = useAuth();
   const { setPage } = articlesSlice.actions;
   const {
     data: fetchAllArticlesData,
@@ -24,6 +26,7 @@ const ArticlesPage = () => {
     {
       page,
       limit,
+      isAuth,
     },
     { refetchOnMountOrArgChange: true }
   );
@@ -42,6 +45,7 @@ const ArticlesPage = () => {
       message.error('Не удалось добавить статью в избранное');
     }
   }, [favoriteIsError]);
+
   useEffect(() => {
     if (unFavoriteIsError) {
       message.error('Не удалось удалить статью из избранного');
@@ -49,6 +53,7 @@ const ArticlesPage = () => {
   }, [unFavoriteIsError]);
 
   const onClickFavorite = (slug: string) => {
+    if (!isAuth) return;
     const article = articlesData?.find((article) => article.slug === slug);
     const favoriteAction = article?.favorited ? unFavoriteArticle : favoriteArticle;
     favoriteAction(slug).then((response) => {

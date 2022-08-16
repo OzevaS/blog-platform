@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-undef */
-import { CSSProperties, useEffect, useState } from 'react';
+import { CSSProperties, useEffect, useMemo, useState } from 'react';
 import { Spin, Alert, message } from 'antd';
 import { useParams, useNavigate } from 'react-router-dom';
 
@@ -13,25 +13,34 @@ import {
 } from '../../services/ArticlesService';
 import Notification from '../../components/Notification';
 import { IArticle } from '../../types/Article';
+import { useAuth } from '../../hooks/useAuth';
 
 const SingleArticlePage = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const isAuth = useAuth();
   const [articleData, setArticleData] = useState<IArticle | null>(null);
-  const [notification, setNotification] = useState<{ visible: boolean; style: CSSProperties }>({
-    visible: false,
-    style: {
+  const [notificationVisible, setNotificationVisible] = useState<boolean>(false);
+  const notificationStyle: CSSProperties = useMemo(
+    () => ({
       position: 'absolute',
       top: '120px',
       right: '19px',
-    },
-  });
+    }),
+    []
+  );
 
   const {
     data: fetchArticleData,
     isLoading: fetchArticleDataIsLoading,
     isError: fetchArticleIsError,
-  } = useFetchArticleQuery(slug || '', { refetchOnMountOrArgChange: true });
+  } = useFetchArticleQuery(
+    {
+      slug: slug || '',
+      isAuth,
+    },
+    { refetchOnMountOrArgChange: true }
+  );
   const [deleteArticle, { isError: deleteArticleIsError, isSuccess: deleteArticleIsSuccess }] =
     useDeleteArticleMutation();
   const [favoriteArticle, { isError: favoriteIsError }] = useFavoriteArticleMutation();
@@ -76,6 +85,7 @@ const SingleArticlePage = () => {
   };
 
   const onClickFavorite = (slug: string) => {
+    if (!isAuth) return;
     const article = articleData;
     const favoriteAction = article?.favorited ? unFavoriteArticle : favoriteArticle;
     favoriteAction(slug).then((response) => {
@@ -91,10 +101,7 @@ const SingleArticlePage = () => {
   };
 
   const onDelete = (e: any) => {
-    setNotification((prevState) => ({
-      ...prevState,
-      visible: true,
-    }));
+    setNotificationVisible(true);
   };
 
   const onConfirm = () => {
@@ -104,10 +111,7 @@ const SingleArticlePage = () => {
   };
 
   const onCancel = () => {
-    setNotification((prevState) => ({
-      ...prevState,
-      visible: false,
-    }));
+    setNotificationVisible(false);
   };
 
   return (
@@ -124,10 +128,10 @@ const SingleArticlePage = () => {
           onClickFavorite={onClickFavorite}
         />
       )}
-      {notification.visible && (
+      {notificationVisible && (
         <Notification
           message="Are you sure to delete this article?"
-          style={notification.style}
+          style={notificationStyle}
           onCancel={onCancel}
           onConfirm={onConfirm}
         />

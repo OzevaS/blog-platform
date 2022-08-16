@@ -2,10 +2,10 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { IUserEditRequest, IUserLoginRequest, IUserLoginResponse, IUserRegisterRequest } from '../../types/User';
 import axiosApiInstance from '../../axiosApiInstance';
-import { IArticle } from '../../types/Article';
 
 export const loginUser = createAsyncThunk('user/login', async (params: IUserLoginRequest, thunkAPI) => {
   try {
+    thunkAPI.getState();
     const response = await axiosApiInstance.post<IUserLoginResponse>('/users/login', {
       user: {
         email: params.email,
@@ -43,7 +43,6 @@ export const registerUser = createAsyncThunk('user/register', async (params: IUs
 
 export const updateUser = createAsyncThunk('user/edit', async (params: IUserEditRequest, thunkAPI) => {
   try {
-    console.log('params', params);
     const response = await axiosApiInstance.put<IUserLoginResponse>('/user', {
       user: {
         ...params,
@@ -52,7 +51,6 @@ export const updateUser = createAsyncThunk('user/edit', async (params: IUserEdit
     localStorage.setItem('user', JSON.stringify(response.data.user));
     return response.data.user;
   } catch (error: any) {
-    console.log('updateerror', error);
     return thunkAPI.rejectWithValue('Не удалось обновить данные пользователя');
   }
 });

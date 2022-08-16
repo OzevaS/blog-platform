@@ -50,7 +50,7 @@ const RegisterPage = () => {
     <section className={`${classNames.formSection} small-centered-content`} style={{ maxWidth: '384px' }}>
       <form className={classNames.form} onSubmit={handleSubmit(onSubmit)}>
         <h1 className={classNames.title}>Create new account</h1>
-        <label htmlFor="Username" className={classNameFormGroup(errors.username)}>
+        <label className={classNameFormGroup(errors.username)}>
           Username
           <input {...register('username')} id="name" placeholder="Username" />
           {formErrors?.username && <p>{formErrors.username.message}</p>}

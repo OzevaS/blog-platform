@@ -7,10 +7,11 @@ interface UserState {
   user: IUser | null;
   isAuth: boolean;
   error: {
-    login: UserLoginError;
-    register: UserRegisterError;
-    edit: UserEditError;
+    login: UserLoginError | null;
+    register: UserRegisterError | null;
+    edit: UserEditError | null;
   };
+  profileUpdated: boolean;
 }
 
 const initialState: UserState = {
@@ -18,15 +19,10 @@ const initialState: UserState = {
   isAuth: false,
   error: {
     login: null,
-    register: {
-      username: null,
-      email: null,
-    },
-    edit: {
-      username: null,
-      email: null,
-    },
+    register: null,
+    edit: null,
   },
+  profileUpdated: false,
 };
 
 export const userSlice = createSlice({
@@ -49,6 +45,9 @@ export const userSlice = createSlice({
     },
     clearErrorEditProfile: (state) => {
       state.error.edit = null;
+    },
+    clearSuccessEditProfile: (state) => {
+      state.profileUpdated = false;
     },
   },
   extraReducers: {
@@ -78,6 +77,7 @@ export const userSlice = createSlice({
 
     [updateUser.fulfilled.type]: (state, action: PayloadAction<IUser>) => {
       state.user = action.payload;
+      state.profileUpdated = true;
     },
     [updateUser.pending.type]: (state) => {
       state.error.edit = null;

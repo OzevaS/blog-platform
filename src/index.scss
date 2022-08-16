@@ -18,6 +18,10 @@ a {
   text-decoration: none;
 }
 
+input:focus {
+  outline: none;
+}
+
 .big-centered-content {
   max-width: 940px;
   margin: 26px auto;

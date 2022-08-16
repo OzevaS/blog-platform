@@ -1,4 +1,3 @@
-/* eslint-disable no-continue */
 /* eslint-disable no-restricted-syntax */
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -24,8 +23,9 @@ const ProfilePage = () => {
   const { handleSubmit, register, formState } = useForm<EditProfileFormData>({
     resolver: yupResolver(editProfileSchema),
   });
-  const { user } = useAppSelector((state) => state.userReducer);
+  const { user, profileUpdated } = useAppSelector((state) => state.userReducer);
   const dispatch = useAppDispatch();
+  const { clearSuccessEditProfile: clearStateProfileUpdated } = userSlice.actions;
   const { clearErrorEditProfile } = userSlice.actions;
   const { errors: formErrors } = formState;
   const { edit: editError } = useAppSelector((state) => state.userReducer.error);
@@ -41,6 +41,13 @@ const ProfilePage = () => {
   });
 
   useEffect(() => {
+    if (profileUpdated) {
+      message.success('Профиль обновлен');
+      dispatch(clearStateProfileUpdated());
+    }
+  }, [profileUpdated]);
+
+  useEffect(() => {
     return () => {
       dispatch(clearErrorEditProfile());
     };
@@ -53,7 +60,7 @@ const ProfilePage = () => {
   }, [editError]);
 
   return (
-    <section className={`${classNames.formSection} small-centered-content`} style={{maxWidth: '384px'}}>
+    <section className={`${classNames.formSection} small-centered-content`} style={{ maxWidth: '384px' }}>
       <h1 className={classNames.title}>Edit Profile</h1>
       <form onSubmit={onSubmit}>
         <label htmlFor="Username" className={classNameFormGroup(errors.username)}>
@@ -70,7 +77,7 @@ const ProfilePage = () => {
         </label>
         <label htmlFor="Password" className={classNameFormGroup(errors.password)}>
           New password
-          <input {...register('password', { required: false })} type="password" id="password" placeholder="Password" />
+          <input {...register('password')} type="password" id="password" placeholder="Password" />
           {formErrors?.password && <p>{formErrors.password.message}</p>}
         </label>
         <label htmlFor="Avatar" className={classNameFormGroup(errors.image)}>

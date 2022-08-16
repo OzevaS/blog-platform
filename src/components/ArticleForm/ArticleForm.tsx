@@ -63,9 +63,12 @@ export const ArticleForm: FC<ArticleFormProps> = ({ title, onSubmit, data }) => 
     }
   };
 
-  const onDeleteTag = useCallback((index: number) => {
-    remove(index);
-  }, []);
+  const onDeleteTag = useCallback(
+    (index: number) => {
+      remove(index);
+    },
+    [remove]
+  );
 
   const tagItems = fields.map((tag, index) => {
     return <TagItem register={register} key={tag.id} index={index} onDelete={onDeleteTag} />;

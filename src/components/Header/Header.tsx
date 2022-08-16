@@ -14,6 +14,7 @@ const Header = () => {
 
   const onLogout = () => {
     localStorage.setItem('user', '');
+    localStorage.setItem('token', '');
     dispatch(logout());
   };
 

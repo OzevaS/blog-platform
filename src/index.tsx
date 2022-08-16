@@ -16,11 +16,13 @@ const root = ReactDOM.createRoot(divRoot);
 
 const update = () => {
   root.render(
-    <BrowserRouter>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </BrowserRouter>
+    <React.StrictMode>
+      <BrowserRouter>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </BrowserRouter>
+    </React.StrictMode>
   );
 };
 
