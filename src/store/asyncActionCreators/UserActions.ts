@@ -5,7 +5,6 @@ import axiosApiInstance from '../../axiosApiInstance';
 
 export const loginUser = createAsyncThunk('user/login', async (params: IUserLoginRequest, thunkAPI) => {
   try {
-    thunkAPI.getState();
     const response = await axiosApiInstance.post<IUserLoginResponse>('/users/login', {
       user: {
         email: params.email,
@@ -18,7 +17,7 @@ export const loginUser = createAsyncThunk('user/login', async (params: IUserLogi
     }
     return response.data.user;
   } catch (error: any) {
-    return thunkAPI.rejectWithValue('Не удалось войти в систему');
+    return thunkAPI.rejectWithValue(error.response?.data?.errors || error);
   }
 });
 
@@ -37,7 +36,8 @@ export const registerUser = createAsyncThunk('user/register', async (params: IUs
     }
     return response.data.user;
   } catch (error: any) {
-    return thunkAPI.rejectWithValue('Не удалось зарегистрироваться в системе');
+    console.log('inThunk', error);
+    return thunkAPI.rejectWithValue(error.response?.data?.errors || error);
   }
 });
 
@@ -51,6 +51,6 @@ export const updateUser = createAsyncThunk('user/edit', async (params: IUserEdit
     localStorage.setItem('user', JSON.stringify(response.data.user));
     return response.data.user;
   } catch (error: any) {
-    return thunkAPI.rejectWithValue('Не удалось обновить данные пользователя');
+    return thunkAPI.rejectWithValue(error.response?.data?.errors || error);
   }
 });

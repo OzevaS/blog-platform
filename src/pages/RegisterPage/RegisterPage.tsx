@@ -42,7 +42,7 @@ const RegisterPage = () => {
 
   useEffect(() => {
     if (registerError) {
-      message.error('Не удалось зарегистрироваться');
+      message.error(`Не удалось зарегистрироваться`);
     }
   }, [registerError]);
 
@@ -72,6 +72,7 @@ const RegisterPage = () => {
           <input {...register('passwordConfirm')} id="confirmPassword" placeholder="Confirm password" />
           {formErrors?.passwordConfirm && <p>{formErrors.passwordConfirm.message}</p>}
         </label>
+        <div className={classNames.separator} />
         <div className={classNameFormGroup(errors.confirm)}>
           <label htmlFor="confirm" className={classNames.confirm}>
             <input {...register('confirm')} type="checkbox" id="confirm" />I agree to the processing of my personal

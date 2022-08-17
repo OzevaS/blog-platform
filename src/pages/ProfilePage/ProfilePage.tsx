@@ -25,8 +25,7 @@ const ProfilePage = () => {
   });
   const { user, profileUpdated } = useAppSelector((state) => state.userReducer);
   const dispatch = useAppDispatch();
-  const { clearSuccessEditProfile: clearStateProfileUpdated } = userSlice.actions;
-  const { clearErrorEditProfile } = userSlice.actions;
+  const { clearErrorEditProfile, clearSuccessEditProfile } = userSlice.actions;
   const { errors: formErrors } = formState;
   const { edit: editError } = useAppSelector((state) => state.userReducer.error);
   const errors = { ...formErrors, ...editError };
@@ -43,7 +42,7 @@ const ProfilePage = () => {
   useEffect(() => {
     if (profileUpdated) {
       message.success('Профиль обновлен');
-      dispatch(clearStateProfileUpdated());
+      dispatch(clearSuccessEditProfile());
     }
   }, [profileUpdated]);
 

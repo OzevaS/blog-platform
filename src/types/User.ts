@@ -38,12 +38,14 @@ export interface IUserEditRequest {
   token: string;
 }
 
-export type UserLoginError = string | null;
+export type UserLoginError = {
+  'email or password'?: string;
+};
 export type UserRegisterError = {
-  username: string | null;
-  email: string | null;
+  username?: string | null;
+  email?: string | null;
 } | null;
 export type UserEditError = {
-  username: string | null;
-  email: string | null;
+  username?: string | null;
+  email?: string | null;
 } | null;

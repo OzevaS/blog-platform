@@ -1,4 +1,3 @@
-/* eslint-disable react/forbid-prop-types */
 import * as yup from 'yup';
 
 export const registerSchema = yup.object().shape({
@@ -22,7 +21,11 @@ export const registerSchema = yup.object().shape({
 
 export const loginSchema = yup.object().shape({
   email: yup.string().required('Email is required').email('Invalid email address'),
-  password: yup.string().required('Password is required'),
+  password: yup
+    .string()
+    .required('Password is required')
+    .min(6, 'Password must be at least 6 characters long')
+    .max(40, 'Password must be less than 40 characters long'),
 });
 
 export const editProfileSchema = yup.object().shape(
